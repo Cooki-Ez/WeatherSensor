@@ -1,11 +1,8 @@
 package com.example.WeatherSensor.models;
 
-import com.example.WeatherSensor.util.validation.groups.SensorExistenceValidationGroup;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import org.springframework.beans.factory.annotation.Value;
-
 import java.time.LocalDateTime;
 
 @Entity

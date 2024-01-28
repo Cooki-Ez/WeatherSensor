@@ -1,10 +1,7 @@
 package com.example.WeatherSensor.models;
 
-import com.example.WeatherSensor.util.validation.groups.SensorNameUniquenessValidationGroup;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +17,7 @@ public class Sensor {
     //@NotBlank(groups = SensorNameUniquenessValidationGroup.class)
     private String name;
 
-    @OneToMany(mappedBy = "sensor", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL)
     private List<Measurement> measurements = new ArrayList<>();
 
     public Sensor(String name) {
@@ -28,10 +25,6 @@ public class Sensor {
     }
 
     public Sensor() {
-    }
-
-    public List<Measurement> getMeasurements() {
-        return measurements;
     }
 
     public void setMeasurements(List<Measurement> measurements) {

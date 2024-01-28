@@ -1,10 +1,6 @@
 package com.example.WeatherSensor.dto;
 
 import com.example.WeatherSensor.models.Sensor;
-import com.example.WeatherSensor.util.validation.groups.SensorExistenceValidationGroup;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
@@ -16,7 +12,6 @@ public class MeasurementDTO {
     @NotNull
     private boolean raining;
     @Valid
-    //@NotBlank(groups = SensorExistenceValidationGroup.class)
     private Sensor sensor;
 
     public double getValue() {

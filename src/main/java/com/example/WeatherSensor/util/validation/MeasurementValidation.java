@@ -2,15 +2,12 @@ package com.example.WeatherSensor.util.validation;
 
 import com.example.WeatherSensor.dto.MeasurementDTO;
 import com.example.WeatherSensor.services.SensorsService;
-import com.example.WeatherSensor.util.validation.groups.SensorExistenceValidationGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.springframework.validation.annotation.Validated;
 
 @Component
-@Validated(SensorExistenceValidationGroup.class)
 public class MeasurementValidation implements Validator {
 
     private final SensorsService sensorsService;

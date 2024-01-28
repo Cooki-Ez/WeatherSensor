@@ -5,13 +5,15 @@ import com.example.WeatherSensor.models.Sensor;
 import com.example.WeatherSensor.services.SensorsService;
 import com.example.WeatherSensor.util.errors.sensor.SensorErrorResponse;
 import com.example.WeatherSensor.util.errors.sensor.SensorNotCreatedException;
-import jakarta.validation.Valid;
+import com.example.WeatherSensor.util.validation.SensorValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,16 +23,22 @@ import java.util.List;
 public class SensorsController {
 
     private final SensorsService sensorsService;
+    private final SensorValidator sensorValidator;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public SensorsController(SensorsService sensorsService, ModelMapper modelMapper) {
+    public SensorsController(SensorsService sensorsService, SensorValidator sensorValidator, ModelMapper modelMapper) {
         this.sensorsService = sensorsService;
+        this.sensorValidator = sensorValidator;
         this.modelMapper = modelMapper;
+    }
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(sensorValidator);
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<HttpStatus> register(@RequestBody @Valid SensorDTO sensorDTO,
+    public ResponseEntity<HttpStatus> register(@RequestBody @Validated SensorDTO sensorDTO,
                                                BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder errorMsg = new StringBuilder();

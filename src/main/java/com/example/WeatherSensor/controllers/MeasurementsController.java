@@ -5,8 +5,7 @@ import com.example.WeatherSensor.models.Measurement;
 import com.example.WeatherSensor.services.MeasurementService;
 import com.example.WeatherSensor.util.errors.measurement.MeasurementErrorResponse;
 import com.example.WeatherSensor.util.errors.measurement.MeasurementNotCreatedException;
-import com.example.WeatherSensor.util.validation.groups.SensorExistenceValidationGroup;
-import jakarta.validation.Valid;
+import com.example.WeatherSensor.util.validation.MeasurementValidation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +26,18 @@ public class MeasurementsController {
 
     private final MeasurementService measurementService;
     private final ModelMapper modelMapper;
+    private final MeasurementValidation measurementValidation;
 
     @Autowired
-    public MeasurementsController(MeasurementService measurementService, ModelMapper modelMapper) {
+    public MeasurementsController(MeasurementService measurementService, ModelMapper modelMapper, MeasurementValidation measurementValidation) {
         this.measurementService = measurementService;
         this.modelMapper = modelMapper;
+        this.measurementValidation = measurementValidation;
+    }
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(measurementValidation);
     }
 
     @GetMapping
@@ -47,7 +54,7 @@ public class MeasurementsController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<HttpStatus> add(@RequestBody @Validated(SensorExistenceValidationGroup.class) MeasurementDTO measurementDTO,
+    public ResponseEntity<HttpStatus> add(@RequestBody @Validated MeasurementDTO measurementDTO,
                                           BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             StringBuilder errorMsg = new StringBuilder();
